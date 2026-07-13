@@ -117,25 +117,6 @@ body {
 .hero-cta     { animation: hero-cta 0.7s cubic-bezier(0.16, 1, 0.3, 1) 1.0s both; }
 .hero-scroll  { animation: hero-scroll-hint 2s ease-in-out 1.4s infinite; }
 
-/* ── Gradient orb ── */
-.gradient-orb {
-  position: absolute;
-  width: 600px;
-  height: 600px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at center,
-    rgba(212, 168, 67, 0.08) 0%,
-    rgba(194, 118, 74, 0.04) 40%,
-    transparent 70%
-  );
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  transition: left 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-              top 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 0;
-}
-
 /* ── Project card hover ── */
 .project-card {
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),

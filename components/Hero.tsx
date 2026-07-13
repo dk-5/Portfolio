@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect, type MouseEvent } from "react";
+import { useRef, useEffect } from "react";
 import { site, heroTagline } from "@/lib/data";
 
 declare global {
@@ -11,15 +11,7 @@ declare global {
 }
 
 export default function Hero() {
-  const [orbPos, setOrbPos] = useState({ x: 50, y: 50 });
   const sectionRef = useRef<HTMLElement>(null);
-
-  const handleMouseMove = useCallback((e: MouseEvent<HTMLElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    setOrbPos({ x, y });
-  }, []);
 
   // WebGL water ripple — real shader-based simulation
   useEffect(() => {
@@ -51,7 +43,6 @@ export default function Hero() {
       const $ = window.jQuery;
       if (!$) return;
 
-      // Make the hero section the ripple container
       const $section = $(sectionRef.current);
       $section.css("position", "relative");
 
@@ -65,7 +56,6 @@ export default function Hero() {
 
       $ripple = $section;
 
-      // Style the WebGL canvas behind content
       const canvas = $section.find("canvas").get(0);
       if (canvas) {
         canvas.style.position = "absolute";
@@ -96,16 +86,8 @@ export default function Hero() {
   return (
     <section
       ref={sectionRef}
-      onMouseMove={handleMouseMove}
       className="hero-section relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden px-6"
     >
-      {/* Gradient orb */}
-      <div
-        className="gradient-orb pointer-events-none hidden md:block"
-        style={{ left: `${orbPos.x}%`, top: `${orbPos.y}%` }}
-        aria-hidden="true"
-      />
-
       <div className="relative z-10 mx-auto max-w-3xl text-center">
         <p className="hero-label mb-6 font-mono text-xs tracking-[0.2em] text-gold">
           SOFTWARE ENGINEER &amp; AI/ML RESEARCHER
