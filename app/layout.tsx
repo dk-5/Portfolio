@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import { Instrument_Serif, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Fraunces, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const instrumentSerif = Instrument_Serif({
-  weight: "400",
+const fraunces = Fraunces({
   subsets: ["latin"],
-  variable: "--font-instrument-serif",
+  variable: "--font-fraunces",
   display: "swap",
 });
 
@@ -22,48 +21,45 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Dhruv Kothari — Software Engineer",
+  title: "Dhruv Kothari — Software Engineer & AI/ML Researcher",
   description:
-    "Software Engineer specializing in backend systems, AI/ML research, and full-stack development. Published at IEEE, building production platforms.",
+    "Software Engineer and AI/ML researcher building backend systems, language model pipelines, and full-stack platforms. Incoming MCS at UC Irvine.",
   keywords: [
     "software engineer",
-    "backend",
     "AI/ML",
+    "backend",
     "full-stack",
+    "NLP",
     "Next.js",
     "React",
     "Node.js",
     "Python",
+    "PyTorch",
   ],
   authors: [{ name: "Dhruv Kothari" }],
   openGraph: {
-    title: "Dhruv Kothari — Software Engineer",
+    title: "Dhruv Kothari — Software Engineer & AI/ML Researcher",
     description:
-      "Software Engineer specializing in backend systems, AI/ML research, and full-stack development. Published at IEEE, building production platforms.",
+      "Software Engineer and AI/ML researcher building backend systems, language model pipelines, and full-stack platforms.",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Dhruv Kothari — Software Engineer",
+    title: "Dhruv Kothari — Software Engineer & AI/ML Researcher",
     description:
-      "Software Engineer specializing in backend systems, AI/ML research, and full-stack development.",
+      "Software Engineer and AI/ML researcher building backend systems, language model pipelines, and full-stack platforms.",
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
-      className={`${instrumentSerif.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
+      className={`${fraunces.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
     >
       <body className="font-body antialiased">{children}</body>
     </html>

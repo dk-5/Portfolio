@@ -3,20 +3,22 @@
 :root {
   --ink: #0B0F1A;
   --paper: #F2EFE9;
-  --slate: #64748B;
-  --signal: #22D3EE;
-  --amber: #F59E0B;
-  --surface: #151A28;
+  --ash: #7A8494;
+  --gold: #D4A843;
+  --ember: #C2764A;
+  --surface: #131825;
+  --surface-raised: #1A2033;
 }
 
 @theme inline {
   --color-ink: var(--ink);
   --color-paper: var(--paper);
-  --color-slate: var(--slate);
-  --color-signal: var(--signal);
-  --color-amber: var(--amber);
+  --color-ash: var(--ash);
+  --color-gold: var(--gold);
+  --color-ember: var(--ember);
   --color-surface: var(--surface);
-  --font-display: var(--font-instrument-serif);
+  --color-surface-raised: var(--surface-raised);
+  --font-display: var(--font-fraunces);
   --font-body: var(--font-space-grotesk);
   --font-mono: var(--font-jetbrains-mono);
 }
@@ -47,15 +49,160 @@ body {
 }
 
 ::selection {
-  background: var(--signal);
+  background: var(--gold);
   color: var(--ink);
 }
 
 :focus-visible {
-  outline: 2px solid var(--signal);
+  outline: 2px solid var(--gold);
   outline-offset: 2px;
 }
 
+/* ── Scroll reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Reverse: exits downward with a clear slide, faster than entrance */
+.reveal.reveal-reverse {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 1, 1),
+              transform 0.4s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+/* ── Hero entrance animations ── */
+@keyframes hero-label {
+  from { opacity: 0; letter-spacing: 0.3em; }
+  to   { opacity: 1; letter-spacing: 0.2em; }
+}
+
+@keyframes hero-name {
+  from { opacity: 0; transform: translateY(20px) scale(1.03); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes hero-tagline {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hero-cta {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hero-scroll-hint {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50%      { transform: translateY(6px); opacity: 1; }
+}
+
+.hero-label   { animation: hero-label 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
+.hero-name    { animation: hero-name 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both; }
+.hero-tagline { animation: hero-tagline 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.7s both; }
+.hero-cta     { animation: hero-cta 0.7s cubic-bezier(0.16, 1, 0.3, 1) 1.0s both; }
+.hero-scroll  { animation: hero-scroll-hint 2s ease-in-out 1.4s infinite; }
+
+/* ── Gradient orb ── */
+.gradient-orb {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(212, 168, 67, 0.08) 0%,
+    rgba(194, 118, 74, 0.04) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: left 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              top 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 0;
+}
+
+/* ── Project card hover ── */
+.project-card {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Publication card hover ── */
+.pub-card {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.3s ease;
+}
+
+.pub-card:hover {
+  transform: translateY(-2px);
+}
+
+/* ── Skill tag hover ── */
+.skill-tag {
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.skill-tag:hover {
+  background-color: var(--gold);
+  color: var(--ink);
+  transform: translateY(-1px);
+}
+
+/* ── Bento grid ── */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: auto;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .bento-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Header scroll state ── */
+.header-scrolled {
+  background: rgba(11, 15, 26, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ── Mobile nav overlay ── */
+.mobile-nav-open {
+  overflow: hidden;
+}
+
+/* ── Text utilities ── */
 @layer utilities {
   .text-balance {
     text-wrap: balance;

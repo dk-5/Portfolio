@@ -1,68 +1,159 @@
+"use client";
+
+import { useState, useCallback, useRef, useEffect, type MouseEvent } from "react";
 import { site, heroTagline } from "@/lib/data";
 
+declare global {
+  interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    jQuery: any;
+  }
+}
+
 export default function Hero() {
+  const [orbPos, setOrbPos] = useState({ x: 50, y: 50 });
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const handleMouseMove = useCallback((e: MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setOrbPos({ x, y });
+  }, []);
+
+  // WebGL water ripple — real shader-based simulation
+  useEffect(() => {
+    let destroyed = false;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let $ripple: any = null;
+
+    const loadScript = (src: string): Promise<void> =>
+      new Promise((resolve, reject) => {
+        if (document.querySelector(`script[src="${src}"]`)) {
+          resolve();
+          return;
+        }
+        const s = document.createElement("script");
+        s.src = src;
+        s.onload = () => resolve();
+        s.onerror = reject;
+        document.head.appendChild(s);
+      });
+
+    const init = async () => {
+      if (destroyed) return;
+
+      await loadScript("https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js");
+      await loadScript("https://cdn.jsdelivr.net/npm/jquery.ripples@0.6.3/dist/jquery.ripples.min.js");
+
+      if (destroyed || !sectionRef.current) return;
+
+      const $ = window.jQuery;
+      if (!$) return;
+
+      // Make the hero section the ripple container
+      const $section = $(sectionRef.current);
+      $section.css("position", "relative");
+
+      $section.ripples({
+        resolution: 512,
+        dropRadius: 30,
+        perturbance: 0.06,
+        interactive: true,
+        dropColor: [1.0, 0.82, 0.2],
+      });
+
+      $ripple = $section;
+
+      // Style the WebGL canvas behind content
+      const canvas = $section.find("canvas").get(0);
+      if (canvas) {
+        canvas.style.position = "absolute";
+        canvas.style.top = "0";
+        canvas.style.left = "0";
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        canvas.style.pointerEvents = "none";
+        canvas.style.zIndex = "0";
+        canvas.style.opacity = "1";
+      }
+    };
+
+    init();
+
+    return () => {
+      destroyed = true;
+      if ($ripple) {
+        try {
+          $ripple.ripples("destroy");
+        } catch {
+          // already cleaned up
+        }
+      }
+    };
+  }, []);
+
   return (
-    <section className="relative flex min-h-[100dvh] flex-col items-center justify-center px-6 pt-20 pb-16">
-      <div className="mx-auto max-w-3xl text-center">
-        <p className="mb-4 font-mono text-sm tracking-wider text-signal">
-          SOFTWARE ENGINEER
+    <section
+      ref={sectionRef}
+      onMouseMove={handleMouseMove}
+      className="hero-section relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden px-6"
+    >
+      {/* Gradient orb */}
+      <div
+        className="gradient-orb pointer-events-none hidden md:block"
+        style={{ left: `${orbPos.x}%`, top: `${orbPos.y}%` }}
+        aria-hidden="true"
+      />
+
+      <div className="relative z-10 mx-auto max-w-3xl text-center">
+        <p className="hero-label mb-6 font-mono text-xs tracking-[0.2em] text-gold">
+          SOFTWARE ENGINEER &amp; AI/ML RESEARCHER
         </p>
 
-        <h1 className="font-display text-5xl leading-tight tracking-tight text-paper sm:text-6xl md:text-7xl">
+        <h1 className="hero-name font-display text-5xl leading-[1.05] tracking-tight text-paper sm:text-6xl md:text-7xl lg:text-8xl">
           Dhruv Kothari
         </h1>
 
-        <p className="mt-6 max-w-2xl text-balance text-base leading-relaxed text-slate sm:text-lg">
+        <p className="hero-tagline mt-6 max-w-xl text-balance text-base leading-relaxed text-ash sm:text-lg">
           {heroTagline}
         </p>
 
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+        <div className="hero-cta mt-10 flex flex-wrap items-center justify-center gap-4">
           <a
             href={`mailto:${site.email}`}
-            className="rounded bg-signal px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-signal/80"
+            className="rounded-lg bg-gold px-6 py-3 text-sm font-medium text-ink transition-all duration-200 hover:bg-gold/80 hover:shadow-lg hover:shadow-gold/20"
           >
             Get in touch
           </a>
           <a
-            href={site.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded border border-surface px-5 py-2.5 text-sm text-slate transition-colors hover:border-slate hover:text-paper"
+            href="#projects"
+            className="rounded-lg border border-surface-raised px-6 py-3 text-sm text-ash transition-all duration-200 hover:border-ash hover:text-paper"
           >
-            GitHub
-          </a>
-          <a
-            href={site.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded border border-surface px-5 py-2.5 text-sm text-slate transition-colors hover:border-slate hover:text-paper"
-          >
-            LinkedIn
+            Explore projects
           </a>
         </div>
       </div>
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <a
-          href="#projects"
-          aria-label="Scroll to projects"
-          className="text-slate transition-colors hover:text-paper"
+      <a
+        href="#projects"
+        aria-label="Scroll to projects"
+        className="hero-scroll absolute bottom-10 left-1/2 z-10 -translate-x-1/2 text-ash transition-colors hover:text-paper"
+      >
+        <svg
+          className="h-5 w-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
         >
-          <svg
-            className="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </a>
-      </div>
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 9l-7 7-7-7"
+          />
+        </svg>
+      </a>
     </section>
   );
 }
