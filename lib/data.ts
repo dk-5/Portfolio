@@ -7,7 +7,7 @@ export const site = {
   resumeUrl: "#",
 } as const;
 
-export const heroTagline = `I'm a Software Engineer with a Bachelor's in Information Technology (GPA: 9.38/10) from DJ Sanghvi College of Engineering, and an incoming MCS student at UC Irvine. My experience spans backend engineering — building JWT-authenticated, role-based platforms and Redis-backed rate limiters handling 500+ concurrent clients — and AI/ML research, including leading a team that fine-tuned BLOOM-3B with LoRA and built a cross-lingual medical NLP pipeline published at IEEE MISSF 2026. I'm equally comfortable designing REST APIs and database schemas as I am training and evaluating language models, which lets me contribute across the SE, backend, and AI/ML stack.`;
+export const heroTagline = `I'm a Software Engineer with a passion for building scalable software, intelligent systems, and products that create lasting impact. My work spans backend engineering, full-stack development, and AI, where I enjoy solving challenging problems with clean architecture and thoughtful design. I believe technology is most valuable when it improves people's lives, which is why I love creating meaningful products that are not only technically robust but also intuitive, efficient, and user-focused. Every project is an opportunity to learn, innovate, and build something that truly matters.`;
 
 export interface Project {
   name: string;

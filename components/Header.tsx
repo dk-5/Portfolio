@@ -30,21 +30,14 @@ export default function Header() {
           scrolled ? "header-scrolled" : "bg-transparent"
         }`}
       >
-        <nav className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
-          <a
-            href="#"
-            className="font-display text-lg font-semibold text-paper transition-colors hover:text-gold"
-          >
-            {site.name}
-          </a>
-
+        <nav className="mx-auto flex max-w-3xl items-center justify-center px-6 py-4">
           {/* Desktop nav */}
           <ul className="hidden items-center gap-6 md:flex">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <a
                   href={link.href}
-                  className="text-sm text-ash transition-colors hover:text-paper"
+                  className="text-sm text-ash transition-colors hover:text-gold"
                 >
                   {link.label}
                 </a>

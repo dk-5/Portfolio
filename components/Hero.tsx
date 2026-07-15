@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { site, heroTagline } from "@/lib/data";
 
 declare global {
@@ -12,6 +12,44 @@ declare global {
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [displayedText, setDisplayedText] = useState("");
+  const [showCursor, setShowCursor] = useState(true);
+  const [typingDone, setTypingDone] = useState(false);
+
+  // Typewriter effect for the tagline
+  useEffect(() => {
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReduced) {
+      setDisplayedText(heroTagline);
+      setTypingDone(true);
+      setShowCursor(false);
+      return;
+    }
+
+    let index = 0;
+    const timer = setTimeout(() => {
+      const tick = () => {
+        const char = heroTagline[index];
+        index++;
+        if (index >= heroTagline.length) {
+          setDisplayedText(heroTagline);
+          setTypingDone(true);
+          setTimeout(() => setShowCursor(false), 800);
+        } else {
+          setDisplayedText(heroTagline.slice(0, index));
+          const delay = char === "." || char === "," || char === ";" || char === "—" ? 160
+            : char === " " ? 60
+            : 42 + Math.random() * 20;
+          setTimeout(tick, delay);
+        }
+      };
+      tick();
+    }, 1200);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // WebGL water ripple — real shader-based simulation
   useEffect(() => {
@@ -89,16 +127,26 @@ export default function Hero() {
       className="hero-section relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden px-6"
     >
       <div className="relative z-10 mx-auto max-w-3xl text-center">
-        <p className="hero-label mb-6 font-mono text-xs tracking-[0.2em] text-gold">
+        <p className="hero-label mb-4 font-mono text-xs tracking-[0.15em] text-gold sm:mb-6 sm:text-sm sm:tracking-[0.2em]">
           SOFTWARE ENGINEER &amp; AI/ML RESEARCHER
         </p>
 
-        <h1 className="hero-name font-display text-5xl leading-[1.05] tracking-tight text-paper sm:text-6xl md:text-7xl lg:text-8xl">
+        <h1 className="hero-name font-display text-3xl leading-[1.05] tracking-tight text-paper sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
           Dhruv Kothari
         </h1>
 
         <p className="hero-tagline mt-6 max-w-xl text-balance text-base leading-relaxed text-ash sm:text-lg">
-          {heroTagline}
+          {displayedText}
+          <span
+            className={`inline-block w-[2px] align-middle ml-0.5 bg-gold transition-opacity duration-300 ${
+              showCursor && !typingDone
+                ? "animate-cursor-blink"
+                : typingDone
+                  ? "opacity-0"
+                  : "opacity-100"
+            }`}
+            style={{ height: "1em" }}
+          />
         </p>
 
         <div className="hero-cta mt-10 flex flex-wrap items-center justify-center gap-4">

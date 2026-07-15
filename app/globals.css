@@ -111,11 +111,18 @@ body {
   50%      { transform: translateY(6px); opacity: 1; }
 }
 
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
 .hero-label   { animation: hero-label 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
 .hero-name    { animation: hero-name 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both; }
 .hero-tagline { animation: hero-tagline 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.7s both; }
 .hero-cta     { animation: hero-cta 0.7s cubic-bezier(0.16, 1, 0.3, 1) 1.0s both; }
 .hero-scroll  { animation: hero-scroll-hint 2s ease-in-out 1.4s infinite; }
+
+.animate-cursor-blink { animation: cursor-blink 0.7s step-end infinite; }
 
 /* ── Project card hover ── */
 .project-card {
